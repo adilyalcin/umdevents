@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <title>UMD Events - Your gateway to what's happening in campus</title>
+        <link rel="stylesheet" href="jquery/jquery.mobile-1.3.0.css" />
+        <link rel="stylesheet" href="my.css" />
+		
+        <script src="jquery/jquery-1.9.1.js"></script>
+		<script src="main.js"></script>
+        <script src="jquery/jquery.mobile-1.3.0.js"></script>
+    </head>
+    <body>
+        <!-- Home -->
+        <div data-role="page" id="page_main">
+			<script type="text/javascript">
+				$(document).on('pageinit', '#page_main',init_page_main);
+			</script>       
+            <div data-theme="d" data-role="header">
+				<a href="#" data-icon="check" data-iconpos="left" data-theme="d" class="ui-btn-left">Welcome, Adil Yalçın</a>
+				<h2>UMD - Events</h2>
+				<a href="#" data-icon="delete" data-iconpos="right" data-theme="a" class="ui-btn-right">Logout</a>
+            </div>
+            <div data-role="content">
+                <div data-role="collapsible-set" data-inset="false" id="search_page_collapse_set">
+                    <div data-role="collapsible" data-content-theme="d" data-collapsed="false"
+						 id="search_setting_collapsable"> <!-- -->
+                        <h3>Search Settings</h3>
+<!--                        <fieldset class="ui-grid-a search_main_settings">
+						<div class="ui-block-a">-->
+                        <div data-role="collapsible-set" data-theme="d" data-content-theme="d">
+							<div data-role="collapsible" > <!-- data-collapsed="false" -->
+                                <h3>When? - <span class="search_header_detail" id="header_when_detail">Now</span></h3>
+                                <div data-role="fieldcontain">
+                                    <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
+                                        <input id="radio_when_1" name="when_choice" value="1" type="radio" checked="checked" />
+											<label for="radio_when_1">Now</label>
+                                        <input id="radio_when_2" name="when_choice" value="2" type="radio" />
+											<label for="radio_when_2">At 
+												<span class="search_sub_txt" id="when_sub1">1</span> hours from now
+												</label>
+                                        <input id="radio_when_3" name="when_choice" value="3" type="radio" />
+											<label for="radio_when_3">
+												<span class="search_sub_txt" id="when_sub2">Today</span> in the 
+												<span class="search_sub_txt" id="when_sub3">evening</span>
+												</label>
+										<input id="radio_when_4" name="when_choice" value="4" type="radio" />
+											<label for="radio_when_4">
+												From <span class="search_sub_txt" id="when_sub4">()</span> to 
+												<span class="search_sub_txt" id="when_sub5">()</span>
+											</label>
+                                        <input id="radio_when_5" name="when_choice" value="5" type="radio" />
+											<label for="radio_when_5">Future</label>
+                                        <input id="radio_when_6" name="when_choice" value="6" type="radio" />
+											<label for="radio_when_6">Past</label>
+                                    </fieldset>
+                                </div>
+                            </div>
+							
+							
+                            <div data-role="collapsible">
+                                <h3>Where? - <span class="search_header_detail" id="header_where_detail">Near me (50 feet)</span></h3>
+                                <div data-role="fieldcontain">
+                                    <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
+                                        <input id="radio_where_1" name="where_choice" value="1" type="radio" checked="checked" />
+											<label for="radio_where_1">
+												Near me 
+												(<span class="search_sub_txt" id="where_sub1">?</span> feet)
+												</label>
+                                        <input id="radio_where_2" name="where_choice" value="2" type="radio" />
+											<label for="radio_where_2">
+												Location
+												<span class="search_sub_txt" id="where_sub2">?</span> 
+												(<span class="search_sub_txt" id="where_sub3">?</span> feet)
+												</label>
+                                        <input id="radio_where_3" name="where_choice" value="3" type="radio" />
+											<label for="radio_where_3">Anywhere in campus</label>
+                                    </fieldset>
+                                </div>
+                            </div>
+							
+							
+                            <div data-role="collapsible" >
+                                <h3>Type?</h3>
+								<form>
+
+<div id="type_checkboxes" data-role="fieldcontain">
+	<input id="type_21" name="" type="checkbox" class="etype"/><label for="type_21">Free</label>
+	<input id="type_h_acad" name="" type="checkbox" /><label for="type_h_acad">Academic</label>
+	<fieldset data-role="controlgroup" data-type="vertical" data-mini="true" class="sub_cat">
+		<input id="type_01" name="type_01" type="checkbox" class="etype etype_acad" /><label for="type_01">Forum</label>
+		<input id="type_02" name="type_02" type="checkbox" class="etype etype_acad" /><label for="type_02">Seminar</label>
+		<input id="type_03" name="type_03" type="checkbox" class="etype etype_acad" /><label for="type_03">Conference</label>
+		<input id="type_04" name="type_04" type="checkbox" class="etype etype_acad" /><label for="type_04">Colloqium</label>
+		<input id="type_05" name="type_04" type="checkbox" class="etype etype_acad" /><label for="type_05">Lecture</label>
+	</fieldset>
+	<input id="type_h_art" name="" type="checkbox" /><label for="type_h_art">Art</label>
+	<fieldset data-role="controlgroup" data-type="vertical" data-mini="true" class="sub_cat">
+		<input id="type_06" name="etype_art" type="checkbox" class="etype " /><label for="type_06">Dance Performance</label>
+		<input id="type_07" name="etype_art" type="checkbox" class="etype" /><label for="type_07">Movie/Film/Video</label>
+		<input id="type_08" name="etype_art" type="checkbox" class="etype" /><label for="type_08">Theatre Performance</label>
+		<input id="type_09" name="etype_art" type="checkbox" class="etype" /><label for="type_09">Art Exhibition</label>
+		<input id="type_10" name="etype_art" type="checkbox" class="etype" /><label for="type_10">Concert</label>
+	</fieldset>
+	<input id="type_h_sport" name="" type="checkbox" /><label for="type_h_sport">Sports</label>
+	<fieldset data-role="controlgroup" data-type="vertical" data-mini="true" class="sub_cat">
+		<input id="type_11" name="etype_sport" type="checkbox" class="etype" /><label for="type_11">Athletics</label>
+		<input id="type_12" name="etype_sport" type="checkbox" class="etype" /><label for="type_12">Recreation</label>
+	</fieldset>
+	<input id="type_h_cult" name="" type="checkbox" /><label for="type_h_cult">Cultural</label>
+	<fieldset data-role="controlgroup" data-type="vertical" data-mini="true" class="sub_cat">
+		<input id="type_13" name="etype_cult" type="checkbox" class="etype" /><label for="type_13">MCE</label>
+		<input id="type_14" name="etype_cult" type="checkbox" class="etype" /><label for="type_14">Diversity</label>
+	</fieldset>
+	<input id="type_h_other" name="" type="checkbox" /><label for="type_h_other">Other</label>
+	<fieldset data-role="controlgroup" data-type="vertical" data-mini="true" class="sub_cat">
+		<input id="type_15" name="etype_other" type="checkbox" class="etype" /><label for="type_15">Student Organization</label>
+		<input id="type_16" name="etype_other" type="checkbox" class="etype" /><label for="type_16">Community Service</label>
+		<input id="type_17" name="etype_other" type="checkbox" class="etype" /><label for="type_17">Training</label>
+		<input id="type_18" name="etype_other" type="checkbox" class="etype" /><label for="type_18">Health</label>
+		<input id="type_19" name="etype_other" type="checkbox" class="etype" /><label for="type_19">Meeting</label>
+		<input id="type_20" name="etype_other" type="checkbox" class="etype" /><label for="type_20">Special Event</label>
+	</fieldset>
+</div>
+
+  								</form>
+                          </div>
+                        </div>
+<form>
+	<fieldset class="ui-grid-a offsearch">
+	<div class="ui-block-a"> 
+		<label><input type="checkbox" name="like_checkbox" data-mini="false">Events I liked</label> </div>
+	<div class="ui-block-b"> 
+		<input name="" id="searchinput2" placeholder="Search within event title and description" type="search" data-clear-btn="false"/> </div>
+	</fieldset>
+	<div style="margin-left:auto; margin-right:auto; padding-top:0px; padding-bottom:0px;">
+		<input value="Search" data-icon="refresh" data-iconpos="right" data-mini="false" data-theme="a" type="button"
+			id="search_button">
+	</div>
+</form>			
+
+<div data-role="collapsible-set" data-content-theme="c">
+	<div data-role="collapsible" > <!-- data-collapsed="false" -->
+		<h3>Profiles</h3>
+		<div data-role="fieldcontain">
+			<fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
+				<input id="prof_0" name="" value="radio0" type="radio" checked="checked" />
+					<label for="prof_0">Last Used</label>
+				<input id="prof_1" name="" value="radio1" type="radio" />
+					<label for="prof_1">Innovator (Academic events in campus within next week)</label>
+				<input id="prof_2" name="" value="radio11" type="radio" />
+					<label for="prof_2">Food Hunter (Free events tonight)</label>
+				<input id="prof_3" name="" value="radio12" type="radio" />
+					<label for="prof_3">Active (Sports and stuff)	</label>
+				<input id="prof_4" name="" value="radio13" type="radio" />
+					<label for="prof_4">Discover (all events that happened nearby)</label>
+				<input id="prof_5" name="" value="radio13" type="radio" />
+				<!-- user profiles -->
+					<label for="prof_5">MyProfile 1</label>
+				<input id="prof_6" name="" value="radio14" type="radio" />
+					<label for="prof_6">MyProfile 2</label>
+			</fieldset>
+		</div>
+		<input id="profile_store_button" type="submit" value="Store current profile" />
+	</div>
+</div>
+                    </div>
+                </div>
+				
+				
+                <div data-role="collapsible-set" data-inset="false">
+                    <div data-role="collapsible" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u" 
+					     data-content-theme="d"  data-collapsed="true" id="event_listing_collapsable">
+                        <h3>Event Listing</h3>
+<form>
+<fieldset data-role="controlgroup" data-type="horizontal" style="width:100%" class="event_sort" data-mini="true">
+    <input type="radio" name="radio-choice-h-2" id="radio-choice-h-2a" value="on" checked="checked">
+    <label for="radio-choice-h-2a">Sort by Distance</label>
+    <input type="radio" name="radio-choice-h-2" id="radio-choice-h-2b" value="off">
+    <label for="radio-choice-h-2b">Sort by Time</label>
+    <input type="radio" name="radio-choice-h-2" id="radio-choice-h-2c" value="other">
+    <label for="radio-choice-h-2c">Sort by # of likes</label>
+</fieldset>
+</form><br/>
+                        <ul data-role="listview" data-divider-theme="b" data-inset="false" id="event_listing_ul">
+							<!-- event listing is automatically generated -->
+                        </ul><br/>
+
+<form>
+<fieldset data-role="controlgroup" data-type="horizontal" style="width:100%" class="event_nav" data-mini="true">
+    <a href="#" data-role="button" data-icon="arrow-l" data-iconpos="left">Previous Page</a>
+    <a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right">Next Page</a>
+</fieldset>
+</form><br/>
+
+						</div>
+                </div>
+            </div>
+			
+			
+            <div data-theme="a" data-role="footer" data-position="fixed">
+                <h3>-</h3>
+				<a href="about.html" data-icon="info" data-iconpos="left" data-theme="a" class="ui-btn-left"
+					data-transition="slide">About</a>
+				<a href="#page_help" data-icon="info" data-iconpos="right" data-theme="a" class="ui-btn-right"
+					data-transition="slide">Help</a>
+            </div>
+		</div>
+		
+		
+		
+		
+		<div data-role="dialog" data-close-btn="right" class="my_dialogs" id="when_in_x_hours_dialog">
+			<div data-theme="d" data-role="header"><h2>Select hours from now</h2></div>
+			<div data-role="content" data-theme="c">
+				<form>
+					<div data-role="fieldcontain" style="margin-left:auto; margin-right:auto;" align="center">
+						<select name="when_hours_from_now" id="when_hours_from_now" data-native-menu="false"> 
+							<!-- data-native-menu="false" -->
+							<option value="1">1 hours</option>
+							<option value="2">2 hours</option>
+							<option value="3">3 hours</option>
+							<option value="4">4 hours</option>
+							<option value="5">5 hours</option>
+							<option value="6">6 hours</option>
+							<option value="7">7 hours</option>
+							<option value="8">8 hours</option>
+						</select>
+					</div>
+				</form>
+				<a href="#" data-role="button" data-rel="back" data-theme="c">OK</a>
+			</div>
+        </div>
+		
+		
+
+		<div data-role="dialog" data-close-btn="right" class="my_dialogs" id="profile_store_dialog">
+			<div data-theme="d" data-role="header"><h2>Profile Name</h2></div>
+			<div data-role="content" data-theme="c">
+				<form>
+					<input type="text" data-clear-btn="true" name="new_profile_name" id="new_profile_name" value=""
+						placeholder="New profile name...">
+				</form>
+				<div data-role="controlgroup" data-type="horizontal" style="width: 100%;">
+					<a href="#" style="width:49%;" data-role="button" data-rel="back" data-theme="c">Cancel</a>
+					<a href="#" style="width:49%;" data-role="button" data-rel="back" data-theme="c">OK</a>
+				</div>
+			</div>
+        </div>
+		
+		
+		<div data-role="dialog" data-close-btn="right" class="my_dialogs" id="when_rel_day_hour_dialog">
+			<div data-theme="d" data-role="header"><h2>Select day and hour range</h2></div>
+			<div data-role="content" data-theme="c">
+				<form>
+					<div data-role="fieldcontain" align="center">
+						<select name="when_rel_day_select" id="when_rel_day_select" data-native-menu="false">
+							<option value="Today" selected>Today</option>
+							<option value="Tomorrow">Tomorrow</option>
+							<option value="This week">This week</option>
+							<option value="Next week">Next week</option>
+						</select>
+					</div><br/>
+					<div data-role="fieldcontain" align="center">
+						<select name="when_rel_hour_select" id="when_rel_hour_select" data-native-menu="false">
+							<option value="morning">Morning (8am - 12pm)</option>
+							<option value="afternoon">Afternoon (12pm - 6pm)</option>
+							<option value="evening" selected>Evening (6pm - 9pm)</option>
+							<option value="night">Night (9pm-12am)</option>
+						</select>
+					</div>
+				</form><br/>
+				<a href="#" data-role="button" data-rel="back" data-theme="c" id="when_rel_day_hour_dialog_ok">OK</a>    
+			</div>
+        </div>
+		
+		
+		<div data-role="dialog" data-close-btn="right" class="my_dialogs" id="when_date_range_dialog">
+			<div data-theme="d" data-role="header"><h2>Select date range</h2></div>
+			<div data-role="content" data-theme="c">
+				<form>
+						<label for="when_date_range_from">From</label>
+					<input type="date" data-clear-btn="true" name="when_date_range_from" id="when_date_range_from" value="">
+						<label for="when_date_range_to">To</label>
+					<input type="date" data-clear-btn="true" name="when_date_range_to" id="when_date_range_to" value="">
+				</form>
+				<a href="#" data-role="button" data-rel="back" data-theme="c">OK</a>
+			</div>
+        </div>
+		
+		
+		<div data-role="dialog" data-close-btn="right" class="my_dialogs" id="where_me_feet_dialog">
+			<div data-theme="d" data-role="header">
+				<h2>Specify maximum distance</h2>
+            </div>
+			<div data-role="content" data-theme="c">
+				Walking dist: Approx. 250 feet per minute<br/>
+				<form action>
+					<div data-role="fieldcontain" align="center">
+						<select name="where_near_feet" id="where_near_feet" data-native-menu="false">
+							<option value="500">500 feet - 2 minutes</option>
+							<option value="1250" selected>1250 feet - 5 minutes</option>
+							<option value="2500">2500 feet - 10 minutes</option>
+							<option value="5000">5000 feet - 15 minutes</option>
+							<option value="7500">7500 feet - 20 minutes</option>
+						</select>
+					</div>
+				</form>
+				<a href="#" data-role="button" data-rel="back" data-theme="c">OK</a>    
+			</div>
+        </div>
+		
+		
+		<div data-role="dialog" data-close-btn="right" class="my_dialogs" id="where_building_dialog">
+			<div data-theme="d" data-role="header"><h2>Select location</h2></div>
+			<div data-role="content" data-theme="c">
+				<ul data-role="listview" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search locations..."
+					id="where_building_list_ul" data-icon="false">
+					<!-- list populated by json file -->
+				</ul></br>
+				<div data-role="fieldcontain" align="center">
+					Walking dist: Approx. 250 feet per minute<br/>
+				</div>
+				<form action>
+					<div data-role="fieldcontain" align="center">
+						<select name="where_building_feet" id="where_building_feet" data-native-menu="false">
+							<option value="500">500 feet - 2 minutes</option>
+							<option value="1250" selected>1250 feet - 5 minutes</option>
+							<option value="2500">2500 feet - 10 minutes</option>
+							<option value="5000">5000 feet - 15 minutes</option>
+							<option value="7500">7500 feet - 20 minutes</option>
+						</select>
+					</div>
+				</form>
+				<a href="#" data-role="button" data-rel="back" data-theme="c">OK</a>    
+			</div>
+        </div>
+	</body>
+</html>
