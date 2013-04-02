@@ -149,6 +149,6 @@ def scheduleFyiProcess():
     a = 1
     while a is not -1:
         Timer(5, processFyiFeed, ()).start()
-        time.sleep(21600)  # sleep while time-delay events execute
+        time.sleep(5)  # sleep while time-delay events execute
 
 scheduleFyiProcess()
