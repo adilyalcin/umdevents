@@ -88,26 +88,20 @@ def processWebcalFeed():
                                          'timeStampNow': timeStampNow          
         }
 
-        try:
-            
-            cur.execute("SELECT * FROM EVENTS WHERE id = '%(id)s'")
-        
-            numrows = int(cur.rowcount)
-            print('number of rows is ' + numrows)
-
-            if numrows == 0:
-                cur.execute("""
-                    INSERT INTO EVENTS (id, title, startDateTime, endDateTime, locationName, locationRoomNumber, allDay, summary, modDt, sequence, timeStampNow) 
-                    VALUES 
-                        (%(id)s, %(title)s, %(startDateTime)s, %(endDateTime)s, %(locationName)s, %(locationRoomNumber)s, %(allDay)s, %(summary)s, %(modDt)s, %(sequence)s, %(timeStampNow)s)
-                """, events_dictionary_with_webcal_data)
+        try:    
+            cur.execute("""
+                INSERT INTO EVENTS (id, title, startDateTime, endDateTime, locationName, locationRoomNumber, allDay, summary, modDt, sequence, timeStampNow) 
+                VALUES 
+                    (%(id)s, %(title)s, %(startDateTime)s, %(endDateTime)s, %(locationName)s, %(locationRoomNumber)s, %(allDay)s, %(summary)s, %(modDt)s, %(sequence)s, %(timeStampNow)s)
+            """, events_dictionary_with_webcal_data)
         except:
-            print("Error: Inserting data")     
+            print("Error: Inserting data")
 
-        conn.commit()
 
-        cur.close()
-        conn.close()    
+    conn.commit()
+
+    cur.close()
+    conn.close()    
     
         
 def scheduleWebcalProcess():

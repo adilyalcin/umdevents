@@ -99,17 +99,12 @@ class SampleScanner:
         }
 
         try:
-            
-            cur.execute("SELECT * FROM EVENTS WHERE id = '%(id)s'")
-        
-            numrows = int(cur.rowcount)
+            cur.execute("""
+                INSERT INTO EVENTS (id, title, description, startDateTime, endDateTime, audience, locationName, locationRoomNumber, categories, eventWebsite, announcementDate, timeStampNow) 
+                VALUES 
+                    (%(id)s, %(title)s, %(description)s, %(startDateTime)s, %(endDateTime)s, %(audience)s, %(locationName)s, %(locationRoomNumber)s, %(categories)s, %(eventWebsite)s, %(announcementDate)s, %(timeStampNow)s)
+            """, events_dictionary_with_fyi_data)
 
-            if numrows == 0:
-                cur.execute("""
-                    INSERT INTO EVENTS (id, title, description, startDateTime, endDateTime, audience, locationName, locationRoomNumber, categories, eventWebsite, announcementDate, timeStampNow) 
-                    VALUES 
-                        (%(id)s, %(title)s, %(description)s, %(startDateTime)s, %(endDateTime)s, %(audience)s, %(locationName)s, %(locationRoomNumber)s, %(categories)s, %(eventWebsite)s, %(announcementDate)s, %(timeStampNow)s)
-                """, events_dictionary_with_fyi_data)
         except:
             print("Error: Inserting data")
             
@@ -131,19 +126,7 @@ def processFyiFeed():
     data = file.read()
     file.close()
     doc = parseString(data)
-    SampleScanner(doc)
-    
-    conn = pymysql.connect(host='127.0.0.1', port=3306, user='umdevents', passwd='umdevents', db='UMDEVENTS')
-    cur = conn.cursor()        
-    
-    cur.execute("SELECT * FROM EVENTS")        
-    rows = cur.fetchall()
-
-    for row in rows:
-        print(row)
-    
-    cur.close()
-    conn.close()    
+    SampleScanner(doc) 
         
 def scheduleFyiProcess():
     a = 1
