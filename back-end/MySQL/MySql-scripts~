@@ -55,5 +55,5 @@ CREATE TABLE IF NOT EXISTS EVENTS(
 
 ********************
 
-mysql> source /home/samet/CMSC818G/back-end/MySQL/buildings.sql
+
 
