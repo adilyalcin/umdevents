@@ -28,10 +28,7 @@ function updateSearchText_Where(){
 	// update sub-texts
 	$("#where_sub1").text($("#where_near_feet").val());
 	$("#where_sub2").text(selectedLoc);
-	if(selectedLoc=="?")
-		$("#where_sub3").text("?");
-	else
-		$("#where_sub3").text($("#where_building_feet").val());
+	$("#where_sub3").text((selectedLoc=="?")?"?":$("#where_building_feet").val())
 }
 		
 $( window.document ).bind( "mobileinit", function() {
@@ -44,33 +41,56 @@ function twoDigits(i){ if(i<10) return "0"+i; return i; }
 function getDate(d){ return d.getDate()+" "+monthNames[d.getMonth()]+" "+d.getFullYear(); }
 function getHour(d){ return twoDigits(d.getHours())+":"+twoDigits(d.getMinutes()) }
 
+function eventMultiDay(e){
+	return !(
+		(e.dateBegin.getDate() == e.dateEnd.getDate()) &&
+		(e.dateBegin.getFullYear() == e.dateEnd.getFullYear()) &&
+		(e.dateBegin.getMonth() == e.dateEnd.getMonth())
+	);
+}
+
 function eventDate(e){
 	var s;
-	var dateBegin = new Date(e["startDateTime"]);
-	var dateEnd   = new Date(e["endDateTime"]);
 	// if begin and end date is the same, display the same date, only change start/end time
-	if(
-		(dateBegin.getDate() == dateEnd.getDate()) &&
-		(dateBegin.getFullYear() == dateEnd.getFullYear()) &&
-		(dateBegin.getMonth() == dateEnd.getMonth())
-	){
-		s = "<strong>"+getDate(dateBegin)+"</strong> "+
-			getHour(dateBegin) + " - " + getHour(dateEnd);
+	if(!eventMultiDay(e)){
+		s = "<strong>"+getDate(e.dateBegin)+"</strong> "+
+			getHour(e.dateBegin) + " - " + getHour(e.dateEnd);
 	} else {
-		s = "<strong>"+getDate(dateBegin)+"</strong> "+getHour(dateBegin) + " - " + 
-			"<strong>"+getDate(dateEnd)+"</strong> "+getHour(dateEnd);
+		s = "<strong>"+getDate(e.dateBegin)+"</strong> "+getHour(e.dateBegin) + " - " + 
+			"<strong>"+getDate(e.dateEnd)+"</strong> "+getHour(e.dateEnd);
 	}
 	return s;
 }
 
+function eventMultiDay(e){
+	return true;
+	var dateBegin = new Date(e["startDateTime"]);
+	var dateEnd   = new Date(e["endDateTime"]);
+	return 
+}
+
 var buildings_loaded = false;
+loadBuildings = function() {
+	if(buildings_loaded) return;
+	// create building list
+	$.getJSON('./json/buildings_all.json', function(data) {
+		var trgt = $("#where_building_list_ul");
+		// alert(data.length); //uncomment this for debug
+		for (var i = 0; i < data.length; i++) {
+			trgt.append("<li><a href=\"#\">"+data[i]["name"]+"</a></li>");
+		}
+		trgt.listview("refresh");
+		$('input[data-type="search"]').trigger("change");
+		buildings_loaded = true;
+	});
+}
 
 // from http://stackoverflow.com/questions/10671092/passing-data-between-pages-with-jquery-mobile
 function parseURLParams(url) {
   var queryStart = url.indexOf("?") + 1;
   var queryEnd   = url.indexOf("#") + 1 || url.length + 1;
   var query      = url.slice(queryStart, queryEnd - 1);
-  var params  = {};
+  var params     = {};
 
   if (query === url || query === "") return params;
 
@@ -80,9 +100,7 @@ function parseURLParams(url) {
     var nv = nvPairs[i].split("=");
     var n  = decodeURIComponent(nv[0]);
     var v  = decodeURIComponent(nv[1]);
-    if ( !(n in params) ) {
-      params[n] = [];
-    }
+    if ( !(n in params) ) params[n] = [];
     params[n].push(nv.length === 2 ? v : null);
   }
   return params;
@@ -96,18 +114,29 @@ function init_event_page(){
 		else eventID = eventId;
 //		alert("eventId:"+eventID);	
 		// read event data
-		$.getJSON('./json/event.json?id='+eventID, function(data) {
+		$.getJSON('./json/event?id='+eventID, function(data) {
+			data.dateBegin = new Date(data["startDateTime"]);
+			data.dateEnd   = new Date(data["endDateTime"]);
 			$("#event_title").text(data["title"]);
 			$("#event_description").text(data["description"]);
 			if(data["eventWebsite"]){
 				$("#event_webpage").html(
 					"<br/><strong>Visit <a href=\""+data["eventWebsite"]+"\" target=\"_blank\">this page</a> for more information.</strong>");
 			}
-			$("#event_location").text(data["locationName"]);
-			if(data["locationRoomNumber"])
-				$("#event_locationroom").text(data["locationRoomNumber"]);
-			else
-				$("#event_locationroom").text("");
+			{	// Location
+				$("#event_location").text(data["locationName"]);
+				if(data["locationRoomNumber"])
+					$("#event_locationroom").text(data["locationRoomNumber"]);
+				else
+					$("#event_locationroom").text("");
+				if(data["locationCode"]){
+					$("#event_info_maplink").css('display',((data["locationCode"])?"block":"none"));
+					$("#event_info_maplink").html(
+						"<a href=\"http://www.umd.edu/CampusMaps/bld_detail.cfm?bld_code="+
+							data["locationCode"].toUpperCase()+"\">Click for map</a>");
+				}
+				event_info_maplink
+			}
 			$("#event_audience").text(data["audience"]);
 			// categories, loop through (TODO)
 			//var cat = "";
@@ -122,29 +151,37 @@ function init_event_page(){
 				$("#event_time").html(eventDate(data));
 			}
 			
+			$("#event_info_multiday").css('display',(eventMultiDay(data)?"block":"none"));
 		});
 	});
 //	alert("eventId: (captured at event page):"+eventId);
 }
 
+updateCatDisplay = function(){
+	// select/deselct all sub-categories. If no subcategory exist, has no effect.
+	$("INPUT[class~='sub_"+this.id+"']").prop('checked', this.checked).checkboxradio("refresh");
+	// update categories
+	var cats= [
+		[1,2,6],
+		[7,8,12],
+		[13,14,15],
+		[16,17,18],
+		[19,20,25]
+	];
+	for(var c=0;c<cats.length;c++){
+		var show_et=false;
+		for(var i=cats[c][1]; i<=cats[c][2]; i++) {show_et = show_et || $('#et_'+i).prop('checked'); }
+		$("input[class~='et_"+cats[c][0]+"']").prop('checked',(show_et!=false)).checkboxradio("refresh");
+	//	var x=$("input[class~='et_1']").parent().children().children().children('span[class~=\'ui-icon\']');
+	//	x.css("background-color","transparent");
+		$("fieldset[class~='sub_et_"+cats[c][0]+"']").css('display',((show_et==false)?'none':'block'));
+	}
+}
+
 // detch the building data & create dom elements only when building selection is to be displayed
 function init_page_main() {
-	$("#where_building_dialog").on("pageshow",function() {
-		if(buildings_loaded) return;
-		// create building list
-		$.getJSON('./json/buildings_all.json', function(data) {
-			var trgt = $("#where_building_list_ul");
-			// alert(data.length); //uncomment this for debug
-			for (var i = 0; i < data.length; i++) {
-				trgt.append("<li><a href=\"#\">"+data[i]["name"]+"</a></li>");
-			}
-			trgt.listview("refresh");
-			$('input[data-type="search"]').trigger("change");
-			buildings_loaded = true;
-		});
-	});
-
 	selectedLoc = "?";
+	$("#where_building_dialog").on("pageshow",loadBuildings);
 	
 	$("#profile_store_button").on("click", function() {
 		$.mobile.changePage('#profile_store_dialog',   { transition: "pop"});
@@ -171,15 +208,9 @@ function init_page_main() {
 	});
 	
 	$("[name=when_hours_from_now]").change(function(){
-//				alert("SDS : " + $("#when_hours_from_now").val());
-//				var tt = $(".ui-dialog");
-//				tt.dialog("close");
-//				$("#when_hours_from_now-dialog").dialog("close");
-//				$("#when_in_x_hours_dialog").dialog("close");
 		updateSearchText_When();
 	});
-	
-	$("#when_rel_day_hour_dialog").on("pagehide", function() {
+		$("#when_rel_day_hour_dialog").on("pagehide", function() {
 		updateSearchText_When();
 	});
 	$("#when_date_range_dialog").on("pagehide", function() {
@@ -193,24 +224,16 @@ function init_page_main() {
 	});
 	
 	$("#where_building_list_ul").on('click', 'li', function() {
-//				alert(this.textContent);
 		selectedLoc = this.textContent;
 		$('input[data-type="search"][id!="searchinput2"]').val(this.textContent);
 		$('input[data-type="search"][id!="searchinput2"]').trigger("change");
-		//t.text(this.textContent);
 	});
 	
 	$("#search_button").on('click', function() {
 		$("#event_listing_collapsable").trigger('expand');
 		$("#search_setting_collapsable").trigger('collapse');
 		updateEventList();
-//		$("#search_page_collapse_set").collapsibleset( "refresh" );
-		
 	});
-	
-	// Fot future ref:
-	// http://jsfiddle.net/NwbZu/2/
-	// checkbox items in the ul list
 	
 	// set todays date by default on date selection option
 	{	var fullDate = new Date()
@@ -221,36 +244,9 @@ function init_page_main() {
 		$("#when_date_range_to").val(currentDate);
 	}
 	
-	$("#type_h_acad").click(function(){
-		$("INPUT[class='etype_acad']").checkboxradio();
-		var t=$('#type_h_acad').is(':checked');
-		$("INPUT[class='etype_acad']").attr({
-			checked: true
-		});
-		$("INPUT[class='etype_acad']").checkboxradio("refresh");
-	});
-	
-	$("#type_h_art").click(function(){
-		$("INPUT[name='etype_art']").attr({
-			checked: $('#type_h_art').is(':checked')
-		}).checkboxradio("refresh");
-	});
-	$("#type_h_sport").click(function(){
-		$("INPUT[name='etype_sport']").attr({
-			checked: $('#type_h_sport').is(':checked')
-		}).checkboxradio("refresh");
-	});
-	$("#type_h_other").click(function(){
-		$("INPUT[name='etype_other']").attr({
-			checked: $('#type_h_other').is(':checked')
-		}).checkboxradio("refresh"); 
-	});
-	$("#type_h_cult").click(function(){
-		$("INPUT[name='etype_cult']").attr({
-			checked: $('#type_h_cult').is(':checked')
-		}).checkboxradio("refresh");
-		$("INPUT[name='etype_cult']").checkboxradio("refresh");
-	});
+	// capture category click updates
+	$(".et_x").click(updateCatDisplay);
+	updateCatDisplay();
 	
 	$("#search_I_liked_id").click(function(){
 		var bttn=$("#search_I_liked_id");
@@ -265,16 +261,17 @@ function init_page_main() {
 
 	updateSearchText_When();
 	updateSearchText_Where();
-	
 }
 
 function updateEventList(){
 	// create event list
-	$.getJSON('./json/events.json', function(data) {
+	$.getJSON('./json/search', function(data) {
 		var trgt = $("#event_listing_ul");
 		// alert(data.length); //uncomment this for debug
 		for (var i = 0; i < data.length; i++) {
 			var e = data[i];
+			e.dateBegin = new Date(e["startDateTime"]);
+			e.dateEnd   = new Date(e["endDateTime"]);
 			var t = 
 				"<li data-theme=\"";
 			if(!e["liked"]) 

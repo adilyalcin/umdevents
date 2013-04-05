@@ -26,9 +26,9 @@
             <br/>
 			<ul data-role="listview" data-inset="false">
 				<li data-role="list-divider" style="text-align:middle;" data-theme="a">
-					<h1 id="event_title" style="display:inline; ">Information</h1>
-					<a data-role="button" data-icon="check" data-inline="true" data-iconpos="left" data-mini="true"
-						style="margin: 0px; float: right; ">Like</a>
+					<h1 id="event_title" style="display:inline; ">event_title</h1>
+<!--					<a data-role="button" data-icon="check" data-inline="true" data-iconpos="left" data-mini="true"
+						style="margin: 0px; float: right; ">Like</a>-->
 					</li>
 				<li>
 					<h2>Description</h2>
@@ -39,12 +39,12 @@
 					<h2>Time</h2>
 					<p><strong>Context aware time display</strong></p>
 					<p id="event_time"></p>
-					<p class="ui-li-aside"><strong>Multi-day event</strong></p>
+					<div class="ui-li-aside" id="event_info_multiday" style="display:none">Multi-day event</div>
 					</li>
 				<li>
 					<h2>Location</h2>
 					<p><strong id="event_location"></strong> - <span id="event_locationroom"></span></p>
-					<p class="ui-li-aside"><strong>Show on campus map</strong></p>
+					<div class="ui-li-aside" id="event_info_maplink" style="font-weight:700"></div>
 					</li>
 				<li>
 					<h2>Audience</h2>

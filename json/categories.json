@@ -1,0 +1,44 @@
+[
+	{"id": 0, "name":"Free"},
+	{"id": 1, "name":"Academic", "sub":
+		[
+			{"id": 2, "name":"Forum"},
+			{"id": 3, "name":"Seminar"},
+			{"id": 4, "name":"Conference"},
+			{"id": 5, "name":"Colloqium"},
+			{"id": 6, "name":"Lecture"}
+		]
+	},
+	{"id": 7, "name":"Art", "sub":
+		[
+			{"id": 8, "name":"Dance Performance"},
+			{"id": 9, "name":"Movie/Film/Video"},
+			{"id": 10, "name":"Theatre Performance"},
+			{"id": 11, "name":"Art Exhibition"},
+			{"id": 12, "name":"Concert"}
+		]
+	},
+	{"id": 13, "name":"Sports", "sub":
+		[
+			{"id": 14, "name":"Athletics"},
+			{"id": 15, "name":"Recreation"}
+		]
+	},
+	{"id": 16, "name":"Cultural", "sub":
+		[
+			{"id": 17, "name":"MCE"},
+			{"id": 18, "name":"Diversity"}
+		]
+	},
+	{"id": 19, "name":"Other", "sub":
+		[
+			{"id": 20, "name":"Student Organization"},
+			{"id": 21, "name":"Community Service"},
+			{"id": 22, "name":"Training"},
+			{"id": 23, "name":"Health"},
+			{"id": 24, "name":"Meeting"},
+			{"id": 25, "name":"Special Event"}
+		]
+	}
+]
+
