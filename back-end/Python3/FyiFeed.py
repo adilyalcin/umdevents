@@ -2,8 +2,7 @@ from xml.dom.minidom import parseString, Node
 import re
 from threading import Timer
 import time
-#from urllib.request import urlopen # For python 3
-import urllib # For python 2.7
+from urllib.request import urlopen
 from datetime import datetime
 import pymysql 
 
@@ -119,12 +118,11 @@ class SampleScanner:
             if child.nodeType != Node.ELEMENT_NODE:
                 continue
             if child.tagName == 'category':
-                category = self.gettext([node])
-        print("category: %s" % (category))
+                category =  self.gettext([node])
+        return category.lstrip(' ')
 
 def processFyiFeed():
-    file = urllib.urlopen('http://www.umd.edu/fyi/eventFeed/') # For python 2.7
-    #file = urlopen('http://www.umd.edu/fyi/eventFeed/') # For python 3
+    file = urlopen('http://www.umd.edu/fyi/eventFeed/')
     data = file.read()
     file.close()
     doc = parseString(data)
