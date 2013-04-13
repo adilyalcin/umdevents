@@ -11,14 +11,14 @@ use UMDEVENTS;
 *******************
 
 CREATE TABLE IF NOT EXISTS BUILDINGS(
-         bldgId VARCHAR(3) NOT NULL,
+         bldgId VARCHAR(3),
          bldgName VARCHAR(100),
 	 bldgNn VARCHAR(100),
-	 facilityId INT,
+	 facilityId INT NOT NULL,
 	 bldg3Code VARCHAR(3),
 	 xCentCoord FLOAT(10,4),
 	 yCentCoord FLOAT(10,4),
- 	 PRIMARY KEY (bldgId)
+ 	 PRIMARY KEY (facilityId)
        );
 
 ********************
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS EVENTS(
 	 categories VARCHAR(100),
 	 eventWebsite VARCHAR(100),
 	 announcementDate DATE,
-	 buildingId VARCHAR(3),
+	 facilId INT,
 	 buildingAbbreviation VARCHAR(5),
 	 buildingUrl VARCHAR(50),
 	 bio TEXT,
@@ -50,10 +50,10 @@ CREATE TABLE IF NOT EXISTS EVENTS(
 	 allDay VARCHAR(5),
 	 timeStampNow DATETIME,
  	 PRIMARY KEY (id),
-	 FOREIGN KEY (buildingId) REFERENCES BUILDINGS(bldgId)
+	 FOREIGN KEY (facilId) REFERENCES BUILDINGS(facilityId)
        );
 
 ********************
 
-mysql> source /home/samet/CMSC818G/back-end/MySQL/buildings.sql
+mysql> source /home/samet/umdevents/back-end/MySQL/buildings.sql
 

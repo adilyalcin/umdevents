@@ -70,6 +70,8 @@ def processTalksFeed():
         print("title: %s" % (title))
         locationName = item['talk']['building']
         print("locationName: %s" % (locationName))
+        facilId = handleFacilId(locationName)
+        print("facilId: %s" % (facilId))        
         buildingAbbreviation = item['talk']['building_abbrv']
         print("buildingAbbreviation: %s" % (buildingAbbreviation))
         buildingUrl = item['talk']['building_url']
@@ -90,6 +92,7 @@ def processTalksFeed():
                                          'abstract': abstract,
                                          'bio': bio,
                                          'locationName': locationName,
+                                         'facilId': facilId,
                                          'locationRoomNumber': locationRoomNumber,
                                          'buildingAbbreviation': buildingAbbreviation,
                                          'buildingUrl': buildingUrl,
@@ -99,23 +102,109 @@ def processTalksFeed():
 
         try:
             cur.execute("""
-                INSERT INTO EVENTS (id, title, startDateTime, endDateTime, speaker, speakerAffiliation, speakerUrl, abstract, bio, locationName, locationRoomNumber, buildingAbbreviation, buildingUrl, eventWebsite, timeStampNow)
+                INSERT INTO EVENTS (id, title, startDateTime, endDateTime, speaker, speakerAffiliation, speakerUrl, abstract, bio, locationName, facilId, locationRoomNumber, buildingAbbreviation, buildingUrl, eventWebsite, timeStampNow)
                 VALUES
-                    (%(id)s, %(title)s, %(startDateTime)s, %(endDateTime)s, %(speaker)s, %(speakerAffiliation)s, %(speakerUrl)s, %(abstract)s, %(bio)s, %(locationName)s, %(locationRoomNumber)s, %(buildingAbbreviation)s, %(buildingUrl)s, %(eventWebsite)s, %(timeStampNow)s)
+                    (%(id)s, %(title)s, %(startDateTime)s, %(endDateTime)s, %(speaker)s, %(speakerAffiliation)s, %(speakerUrl)s, %(abstract)s, %(bio)s, %(locationName)s, %(facilId)s, %(locationRoomNumber)s, %(buildingAbbreviation)s, %(buildingUrl)s, %(eventWebsite)s, %(timeStampNow)s)
             """, events_dictionary_with_talks_data)
 
         except:
-            print("Error: Inserting data")
+            print("Info: Event is already in the database")
         
     conn.commit()  
             
     cur.close()
     conn.close()
+
+def handleFacilId(bldgNam):
+    if 'energy plant' in bldgNam.lower(): 
+        return 1
+    elif 'memorial' in bldgNam.lower():
+        return 9
+    elif 'patuxent' in bldgNam.lower():
+        return 10
+    elif 'south campus' in bldgNam.lower():
+        return 26
+    elif 'jimenez' in bldgNam.lower():
+        return 34
+    elif 'mckeldin' in bldgNam.lower():
+        return 35
+    elif 'plant sciences' in bldgNam.lower():
+        return 36
+    elif 'shoemaker' in bldgNam.lower():
+        return 37
+    elif 'van munching' in bldgNam.lower():
+        return 39
+    elif 'skinner' in bldgNam.lower():
+        return 44
+    elif 'marie mount' in bldgNam.lower():
+        return 46
+    elif 'woods' in bldgNam.lower():
+        return 47
+    elif 'francis' in bldgNam.lower():
+        return 48
+    elif 'mitchell' in bldgNam.lower():
+        return 52
+    elif 'eppley' in bldgNam.lower():
+        return 68
+    elif 'math' in bldgNam.lower():
+        return 82
+    elif 'physics building' in bldgNam.lower():
+        return 84
+    elif 'martin' in bldgNam.lower():
+        return 88
+    elif 'engineering laboratory' in bldgNam.lower():
+        return 89
+    elif 'chemistry' in bldgNam.lower():
+        return 91
+    elif 'williams' in bldgNam.lower():
+        return 115
+    elif 'health center' in bldgNam.lower():
+        return 140
+    elif 'tawes' in bldgNam.lower():
+        return 141
+    elif 'art-sociology' in bldgNam.lower():
+        return 146
+    elif 'hornbake' in bldgNam.lower():
+        return 147
+    elif 'arboretum' in bldgNam.lower():
+        return 156
+    elif 'cole' in bldgNam.lower():
+        return 162
+    elif 'stamp' in bldgNam.lower():
+        return 163
+    elif 'computer & space' in bldgNam.lower():
+        return 224
+    elif 'kim' in bldgNam.lower():
+        return 225
+    elif 'jull' in bldgNam.lower():
+        return 227
+    elif 'nyumburu' in bldgNam.lower():
+        return 232
+    elif 'public health' in bldgNam.lower():
+        return 255
+    elif 'north' in bldgNam.lower():
+        return 295
+    elif 'young children' in bldgNam.lower():
+        return 381
+    elif 'clarice' in bldgNam.lower():
+        return 386
+    elif 'computer science instructional' in bldgNam.lower():
+        return 406
+    elif 'csic' in bldgNam.lower():
+        return 406
+    elif 'riggs' in bldgNam.lower():
+        return 407
+    elif 'knight' in bldgNam.lower():
+        return 417
+    elif 'research park building' in bldgNam.lower():
+        return 807
+    else:
+        return 19191919
         
 def scheduleTalksProcess():
     a = 1
     while a is not -1:
         Timer(5, processTalksFeed, ()).start()
-        time.sleep(21600) # sleep while time-delay events execute
+        time.sleep(86400) # sleep while time-delay events execute
 
 scheduleTalksProcess()
