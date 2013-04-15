@@ -210,8 +210,7 @@ class SampleScanner:
             return 19191919
 
 def processFyiFeed():
-    file = urllib.urlopen('http://www.umd.edu/fyi/eventFeed/') # For python 2.7
-    #file = urlopen('http://www.umd.edu/fyi/eventFeed/') # For python 3
+    file = urlopen('http://www.umd.edu/fyi/eventFeed/')
     data = file.read()
     file.close()
     doc = parseString(data)

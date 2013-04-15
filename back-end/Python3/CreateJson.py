@@ -35,14 +35,14 @@ for row in rows:
     result.append(d)
 
 # Get results in json object
-#retrieved = json.dumps(result, indent=4)
+retrieved = json.dumps(result, indent=4)
+print retrieved
 
 # Write to file
-#with io.open('../../json/events.json', 'w', encoding='utf-8') as f:
-with open('../../json/events.json', 'w') as f:
-   json.dump(result, f, indent=4, default=default) 
+#with open('../../json/events.json', 'w') as f:
+#   json.dump(result, f, indent=4, default=default) 
   #f.write(unicode(json.dumps(retrieved, ensure_ascii=False)))
-f.close()
+#f.close()
 
 # Finish up
 cursor.close()
