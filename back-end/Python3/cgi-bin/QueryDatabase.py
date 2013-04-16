@@ -20,6 +20,7 @@ class MyEncoder(json.JSONEncoder):
 # Get the parameters passed to this file
 param = cgi.FieldStorage()
 paramFieldList = param.keys()
+numfields = len(paramFieldList)
 
 # Connect
 conn = pymysql.connect(host='127.0.0.1', port=3306, user='umdevents', passwd='umdevents', db='UMDEVENTS')
@@ -36,16 +37,26 @@ for field in paramFieldList:
         queryVariables = queryVariables + (field, val)
 
 # Query the database
-sql = 'SELECT %s,%s,%s,%s,%s,%s,%s,%s,%s,%s FROM EVENTS WHERE '
-sql1 = sql + ' facilId=162 AND audience=\"Public\"'
-for field in paramFieldList:
-    numvals = len((param[field].value).split("-")) # Get number of values specified for this field
-    sql = sql + ' ( '
-    for i in range(0,numvals):
-	sql = sql + ' %s=%s OR '
-    sql = sql[:-4] # Get rid of last OR
-    sql = sql + ') AND '
-sql = sql[:-5] # Get rid of last AND
+sql = 'SELECT %s,%s,%s,%s,%s,%s,%s,%s,%s,%s FROM EVENTS'
+# If atleast one parameter is specified
+if(numfields>0):
+	sql = sql + ' WHERE '
+	#sql1 = sql + ' facilId=162 AND audience=\"Public\"'
+	
+	# Process the options for facilty id and categories: these have to be matched exactly
+	facilityCategory =[]
+	if("facilId" in paramFieldList):
+	    facilityCategory.append("facilId")
+	if("categories" in paramFieldList):
+	    facilityCategory.append("categories")
+	for field in facilityCategory:
+	    numvals = len((param[field].value).split("-")) # Get number of values specified for this field
+	    sql = sql + ' ( '
+	    for i in range(0,numvals):
+		sql = sql + ' %s=%s OR '
+	    sql = sql[:-4] # Get rid of last OR
+	    sql = sql + ') AND '
+	sql = sql[:-5] # Get rid of last AND
 
 #cursor.execute(sql1 % (outputFields))
 cursor.execute(sql % (queryVariables))
@@ -65,16 +76,15 @@ for row in rows:
 
 numrows=len(result)
 # Get results in json object
-retrieved = json.dumps(result, cls=MyEncoder, sort_keys=True)
+#retrieved = json.dumps(result, cls=MyEncoder, sort_keys=True, encoding="utf-8", ensure_ascii=False)
 
 # Finish up
 cursor.close()
 conn.close()
 
 # Write to a file
-#with open('tempfile.txt','wt') as outfile:
 with open('/home/snigdha/Documents/Classes/ContextClass/ClassProject/umdevents/json/events.json','wt') as outfile:
-    json.dump(result, outfile, cls=MyEncoder, sort_keys=True, indent=4)
+    json.dump(result, outfile, cls=MyEncoder, sort_keys=True, indent=4, encoding="utf-8", ensure_ascii=False)
 
 print "Content-type:text/html\r\n\r\n"
 print "<html>"
