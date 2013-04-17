@@ -30,10 +30,16 @@ cursor = conn.cursor ()
 # Field names to be outputted
 outputFields = ('id', 'title', 'description', 'startDateTime','endDateTime', 'audience', 'locationName', 'locationRoomNumber', 'categories', 'liked');
 queryVariables = outputFields
-for field in paramFieldList:
+facilityCategory =[]
+if("facilId" in paramFieldList):
+    facilityCategory.append("facilId")
+if("categories" in paramFieldList):
+    facilityCategory.append("categories")
+for field in facilityCategory:
     valuelist = (param[field].value).split("-") # Get a list of all values
     for val in valuelist:
-	val = '\"'+val+'\"'
+	if(field=="categories"):
+	    val = '\"%,'+val+',%\"'
         queryVariables = queryVariables + (field, val)
 
 # Query the database
@@ -41,7 +47,7 @@ sql = 'SELECT %s,%s,%s,%s,%s,%s,%s,%s,%s,%s FROM EVENTS'
 # If atleast one parameter is specified
 if(numfields>0):
 	sql = sql + ' WHERE '
-	#sql1 = sql + ' facilId=162 AND audience=\"Public\"'
+	sql1 = sql + ' facilId=162 AND audience=\"Public\"'
 	
 	# Process the options for facilty id and categories: these have to be matched exactly
 	facilityCategory =[]
@@ -53,7 +59,10 @@ if(numfields>0):
 	    numvals = len((param[field].value).split("-")) # Get number of values specified for this field
 	    sql = sql + ' ( '
 	    for i in range(0,numvals):
-		sql = sql + ' %s=%s OR '
+		if(field=="facilId"):
+		    sql = sql + ' %s=%s OR '
+		if(field=="categories"):
+		    sql = sql + ' %s LIKE %s OR '
 	    sql = sql[:-4] # Get rid of last OR
 	    sql = sql + ') AND '
 	sql = sql[:-5] # Get rid of last AND
