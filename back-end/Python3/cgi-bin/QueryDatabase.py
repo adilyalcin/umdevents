@@ -92,7 +92,7 @@ cursor.close()
 conn.close()
 
 # Write to a file
-with open('/home/snigdha/Documents/Classes/ContextClass/ClassProject/umdevents/json/events.json','wt') as outfile:
+with open('../../../json/events.json','wt') as outfile:
     json.dump(result, outfile, cls=MyEncoder, sort_keys=True, indent=4, encoding="utf-8", ensure_ascii=False)
 
 print "Content-type:text/html\r\n\r\n"
