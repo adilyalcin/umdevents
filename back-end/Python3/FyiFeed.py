@@ -223,51 +223,51 @@ class SampleScanner:
         if 'other' in categNam.lower(): 
             return 1
         elif 'art' in categNam.lower():
-            return 2
+            return 11
         elif 'exhibition' in categNam.lower():
-            return 2
+            return 11
         elif 'athletics' in categNam.lower():
-            return 3
+            return 14
         elif 'colloquium' in categNam.lower():
-            return 4
+            return 5
         elif 'community' in categNam.lower():
-            return 5
+            return 21
         elif 'service' in categNam.lower():
-            return 5
+            return 21
         elif 'concert' in categNam.lower():
-            return 6
+            return 12
         elif 'conference' in categNam.lower():
-            return 7
+            return 4
         elif 'dance' in categNam.lower():
             return 8
         elif 'diversity' in categNam.lower():
-            return 9
-        elif 'forum' in categNam.lower():
-            return 10
-        elif 'health' in categNam.lower():
-            return 11
-        elif 'lecture' in categNam.lower():
-            return 12
-        elif 'training' in categNam.lower():
-            return 13
-        elif 'mce' in categNam.lower():
-            return 14
-        elif 'meeting' in categNam.lower():
-            return 15
-        elif 'movie' in categNam.lower():
-            return 16
-        elif 'recreation' in categNam.lower():
-            return 17
-        elif 'seminar' in categNam.lower():
             return 18
+        elif 'forum' in categNam.lower():
+            return 2
+        elif 'health' in categNam.lower():
+            return 23
+        elif 'lecture' in categNam.lower():
+            return 6
+        elif 'training' in categNam.lower():
+            return 22
+        elif 'mce' in categNam.lower():
+            return 17
+        elif 'meeting' in categNam.lower():
+            return 24
+        elif 'movie' in categNam.lower():
+            return 9
+        elif 'recreation' in categNam.lower():
+            return 15
+        elif 'seminar' in categNam.lower():
+            return 3
         elif 'special' in categNam.lower():
-            return 19
+            return 25
         elif 'event' in categNam.lower():
-            return 19
+            return 25
         elif 'theatre' in categNam.lower():
-            return 20      
+            return 10    
         elif 'performance' in categNam.lower():
-            return 20                     
+            return 8                     
         else:
             return 29292929
 
