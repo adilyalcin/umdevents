@@ -28,8 +28,6 @@ def GetCloseFacilIds(currlat, currlong, sqdist_in_km):
     for row in rows:
         d = dict(zip(columns, row))
         result.append(str(d["facilityId"]))
-    cursor.close()
-    conn.close()
     return result;
 
 # The following code is to facilitate conversion of time format in json
