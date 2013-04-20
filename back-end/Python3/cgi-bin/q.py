@@ -144,26 +144,25 @@ retrieved = json.dumps(result, cls=MyEncoder, sort_keys=True, encoding="latin-1"
 cursor.close()
 conn.close()
 
-print "Content-type:application/json\r\n\r\n"
-print retrieved.encode('latin-1','ignore')
+#print "Content-type:application/json\r\n\r\n"
+#print retrieved.encode('latin-1','ignore')
 
-#print "Content-type:text/html\r\n\r\n"
-#print "<html>"
-#print "<head>"
-#print "<title></title>"
-#print "</head>"
-#print "<body>"
-#print "<br /><br /><br />"
-#print queryVariables
-#print "<br /><br /><br />"
-#print sql
-#print "<br /><br /><br />"
-#print numrows
-#print "<br /><br /><br />"
-#print additionalFacilIdList
-#print "<br /><br /><br />"
-#print sqdist_in_km
-#print "</body>"
-#print "</html>"
-
+print "Content-type:text/html\r\n\r\n"
+print "<html>"
+print "<head>"
+print "<title></title>"
+print "</head>"
+print "<body>"
+print "<br /><br /><br />"
+print queryVariables
+print "<br /><br /><br />"
+print sql
+print "<br /><br /><br />"
+print numrows
+print "<br /><br /><br />"
+print additionalFacilIdList
+print "<br /><br /><br />"
+print sqdist_in_km
+print "</body>"
+print "</html>"
 
