@@ -37,7 +37,7 @@ class MyEncoder(json.JSONEncoder):
     def default(self, obj):
 	if isinstance(obj, datetime.datetime):
 	    # Time format is Month/Date/Year Hour:minute:sec
-	    return time.strftime("%m/%d/%Y %H:%M:%S", time.gmtime(time.mktime(obj.timetuple())))
+	    return time.strftime("%m/%d/%Y %H:%M:%S", time.localtime(time.mktime(obj.timetuple())))
 	return json.JSONEncoder.default(self, obj)
 
 # Get the parameters passed to this file
@@ -92,6 +92,16 @@ if("facilId" in paramFieldList):
 for buildId in additionalFacilIdList:
     queryVariables = queryVariables + ("facilId", buildId);
 
+# Is there a time query?
+if("fromnow" in paramFieldList):
+    offset = int(param["fromnow"].value) *3600;
+    queryVariables = queryVariables + (offset,offset);
+if("begindate" in paramFieldList and "enddate" in paramFieldList):
+    val1 = '\"'+param["begindate"].value+'\"';
+    val2 = '\"'+param["enddate"].value+'\"';
+    queryVariables = queryVariables + (val1,val2);
+cursor.execute('set time_zone = \'+00:00\''); ####### For some reason, mysql doesn't return correct current time. This line fixes that
+
 # Query the database
 sql = 'SELECT %s,%s,%s,%s,%s,%s,%s,%s,%s,%s FROM EVENTS'
 # If atleast one parameter is specified
@@ -106,7 +116,7 @@ if(numfields>0):
 	    for i in range(0,numvals):
 		sql = sql + ' %s LIKE %s OR '
 	    sql = sql[:-4] # Get rid of last OR
-	    sql = sql + ') AND '
+	    sql = sql + ') AND'
 
 	# Process the options for facility Ids: these have to be matched exactly
 	if("facilId" in paramFieldList or len(additionalFacilIdList)>0):
@@ -118,8 +128,20 @@ if(numfields>0):
 	    for i in range(0,numvals):
 	        sql = sql + ' %s=%s OR '
 	    sql = sql[:-4] # Get rid of last OR
-	    sql = sql + ')'
+	    sql = sql + ') AND'
 
+	# Process the options for time
+	if("future" in paramFieldList):
+	    sql = sql + ' ( UNIX_TIMESTAMP(startDateTime) > UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) AND';
+	if("now" in paramFieldList):
+	    sql = sql + ' ( UNIX_TIMESTAMP(startDateTime) <= UNIX_TIMESTAMP(CURRENT_TIMESTAMP) AND UNIX_TIMESTAMP(endDateTime) >= UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) AND';
+	if("fromnow" in paramFieldList):
+	    sql = sql + ' ( UNIX_TIMESTAMP(startDateTime) <= UNIX_TIMESTAMP(CURRENT_TIMESTAMP) + %d AND UNIX_TIMESTAMP(endDateTime) >= UNIX_TIMESTAMP(CURRENT_TIMESTAMP) + %d) AND';
+	if("begindate" in paramFieldList and "enddate" in paramFieldList):
+	    sql = sql + ' ( UNIX_TIMESTAMP(startDateTime) >= UNIX_TIMESTAMP(%s)  AND UNIX_TIMESTAMP(endDateTime) <= (UNIX_TIMESTAMP(%s)+86400)) AND';
+	
+	sql = sql[:-4] # Get rid of last AND
+	    
 #cursor.execute(sql1 % (outputFields))
 cursor.execute(sql % (queryVariables))
 rows = cursor.fetchall()
@@ -130,10 +152,10 @@ result = []
 for row in rows:
     d = dict(zip(columns, row))
     # Following four lines are there because UI needs date and time separately
-    d['startDate'] = time.strftime("%m/%d/%Y", time.gmtime(time.mktime(d['startDateTime'].timetuple())))
-    d['startTime'] = time.strftime("%H:%M:%S", time.gmtime(time.mktime(d['startDateTime'].timetuple())))
-    d['endDate'] = time.strftime("%m/%d/%Y", time.gmtime(time.mktime(d['endDateTime'].timetuple())))
-    d['endTime'] = time.strftime("%H:%M:%S", time.gmtime(time.mktime(d['endDateTime'].timetuple())))
+    d['startDate'] = time.strftime("%m/%d/%Y", time.localtime(time.mktime(d['startDateTime'].timetuple())))
+    d['startTime'] = time.strftime("%H:%M:%S", time.localtime(time.mktime(d['startDateTime'].timetuple())))
+    d['endDate'] = time.strftime("%m/%d/%Y", time.localtime(time.mktime(d['endDateTime'].timetuple())))
+    d['endTime'] = time.strftime("%H:%M:%S", time.localtime(time.mktime(d['endDateTime'].timetuple())))
     result.append(d)
 
 numrows=len(result)
@@ -144,25 +166,26 @@ retrieved = json.dumps(result, cls=MyEncoder, sort_keys=True, encoding="latin-1"
 cursor.close()
 conn.close()
 
-#print "Content-type:application/json\r\n\r\n"
-#print retrieved.encode('latin-1','ignore')
+print "Content-type:application/json\r\n\r\n"
+print retrieved.encode('latin-1','ignore')
 
-print "Content-type:text/html\r\n\r\n"
-print "<html>"
-print "<head>"
-print "<title></title>"
-print "</head>"
-print "<body>"
-print "<br /><br /><br />"
-print queryVariables
-print "<br /><br /><br />"
-print sql
-print "<br /><br /><br />"
-print numrows
-print "<br /><br /><br />"
-print additionalFacilIdList
-print "<br /><br /><br />"
-print sqdist_in_km
-print "</body>"
-print "</html>"
+#print "Content-type:text/html\r\n\r\n"
+#print "<html>"
+#print "<head>"
+#print "<title></title>"
+#print "</head>"
+#print "<body>"
+#print "<br /><br /><br />"
+#print queryVariables
+#print "<br /><br /><br />"
+#print sql
+#print "<br /><br /><br />"
+#print numrows
+#print "<br /><br /><br />"
+#print retrieved 
+#print "<br /><br /><br />"
+#print sqdist_in_km
+#print "</body>"
+#print "</html>"
+
 
