@@ -172,11 +172,68 @@ Illustrated in Figure 1, UMD Event Finder Service utilizes a persistent storage,
 \caption{UMD Event Finder - Physical Architecture.}
 \end{figure*}
 
-\subsection{Front-end}	 
+\subsection{Front-end Module}	 
 We explain front-end here...
 
-\subsubsection{Back-end}
-We explain back-end here...
+\subsubsection{Back-end Module}
+In this sub section, we elaborate the design and implementation of back-end module for the UMD Event Finder application. 
+
+Defined as Model in the MVC architecture pattern, back-end module is responsible for building and managing the data storage. Using stored data, the application is able to respond to users when the request is made. 
+
+The back-end module contains a relational database, UMDEVENTS with two tables:
+\begin{itemize}
+\item EVENTS and
+\item BUILDINGS 
+\end{itemize}
+
+Events are stored in EVENTS table and facilities on campus are stored in BUILDINGS table. The tables are connected using \texttt{facilityId}. Figure 2 illustrates the schema for the EVENTS table. 
+
+\begin{figure*}
+\centering
+\epsfig{file=figure2.eps,height=3.7in,width=6.6in}
+\caption{UMD Event Finder - Schema for the EVENTS table.}
+\end{figure*}
+
+\texttt{id} is the primary key and \texttt{facilId} is the foreign key in the EVENTS table. 
+
+Figure 3 illustrates the schema for the BUILDINGS table. 
+
+\begin{figure*}
+\centering
+\epsfig{file=figure2.eps,height=3.7in,width=6.6in}
+\caption{UMD Event Finder - Schema for the BUILDINGS table.}
+\end{figure*}
+
+\texttt{facilityId} is the primary key for the BUILDINGS table. 
+
+UMD Event Finder application uses MySQL for relational database. 
+
+BUILDINGS table has been created and populated by transforming an Excel spreadsheet containing facilities data for the entire campus, provided by the Facilities Management. Spatial and non-spatial attributes for the facilities such as facility name, id, latitude, and longitude values are included in the original data.
+
+EVENTS table has been designed and implemented by taking available live data sources into account. The following on campus live data feed were acquired:
+\begin{itemize}
+\item For Your Information (FYI) live data feed available at \cite{fyi:xmlfeed}.
+\item Computer Science Talks live data feed available at \cite{cs:talks}.
+\item Computer Science Web Calendar live data feed available at \cite{cs:webcal}.
+\end{itemize}
+
+The back-end module is basically composed of a number of a number CRON jobs that perform the following scheduled tasks:
+
+\begin{itemize}
+\item Provided the URLs, subscribe to the live events feeds 
+\item Parse the incoming data based on schema and format (XML, JSON)
+\item Check if the unique id per event exists in the database
+\item Push the incoming data into database, if not
+\item Repeat the above steps periodically
+\end{itemize}
+
+The largest events data source on campus, FYI is exposed through a live RSS feed in addition to a static web page. Per our request, the IT Department made the live data feed available in XML. Upon a new event entry by an authorized person, the FYI service accumulates all the events and publishes them periodically in XML form. The UMD Event Finder application back-end module subscribes to the feed on a daily basis, parses the incoming data using Document Object Model (DOM) and pushes it to the internal database. 
+
+In addition to the live FYI feed, the back-end module subscribes to Computer Science departmental feeds. Unlike the FYI, these feeds are provided in JSON. Similar to the FYI subscription, the back-end module subscribes to these departmental feeds, parses the incoming data and pushes it to the internal database.
+
+Events with duplicate identifiers are not allowed in the database. The current subscription frequency is 86400 seconds for all three live data feeds and this frequency is configurable. The current implementation language for the back-end module is Python. The module uses PyMySQL interface to make connection from subscriber to the MySQL database.
+
+This concludes the back-end module.
 
 \subsubsection{Business Logic}
 We explain business logic here...
