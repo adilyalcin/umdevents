@@ -173,13 +173,15 @@ Illustrated in Figure 1, UMD Event Finder Service utilizes a persistent storage,
 \end{figure*}
 
 \subsection{Front-end Module}	 
+\label{frontEnd}
 We explain front-end here...
 
-\subsubsection{Back-end Module}
+\subsection{Back-end Module}
 In this sub section, we elaborate the design and implementation of back-end module for the UMD Event Finder application. 
 
 Defined as Model in the MVC architecture pattern, back-end module is responsible for building and managing the data storage. Using stored data, the application is able to respond to users when the request is made. 
 
+\subsubsection{Database Design}
 The back-end module contains a relational database, UMDEVENTS with two tables:
 \begin{itemize}
 \item EVENTS and
@@ -233,14 +235,50 @@ In addition to the live FYI feed, the back-end module subscribes to Computer Sci
 
 Events with duplicate identifiers are not allowed in the database. The current subscription frequency is 86400 seconds for all three live data feeds and this frequency is configurable. The current implementation language for the back-end module is Python. The module uses PyMySQL interface to make connection from subscriber to the MySQL database.
 
+\subsubsection{Querying the Database}
+This section describes the module for handling the queries from the database. 
+
+This component is also implemented in Python and uses CGI to interact with the web server and PyMySQL to connect to the MySQL database. As described in Section \ref{frontEnd}, the user selects time, location and category choices using pre-specified options. These options are passed to this module in form of CGI parameters to a python script which parsers them and constructs appropriate MYSQL queries. 
+
+One of the front end features allows searching for events happening within a specific radius of a building or user's current position. While building's or user's locations are specified in terms of latitudes and longitudes, a natural way to compute radius would be using Euclidean distances between geographical locations. For this purpose, the latitude-longitude information is converted to Cartesian coordinates before computing distances. Given  a points latitude, $\theta$ and longitude, $\phi$, the Cartesian coordinates ($x,y$) are computed as:\\
+\begin{equation}
+\vec{r}=\left(\begin{array}{c}x\\y\end{array}\right)
+=
+\left(\begin{array}{c}
+R\cos\theta\cos\phi
+\\
+R\cos\theta\sin\phi
+\end{array}\right)
+\end{equation}
+where $R\approx 6371 \mathrm{km}$ is the radius of the Earth. 
+
+For simplicity, it was assumed that all points lie on the XY plane, ie, $z=0$ for all points. Thereafter, the distance between two points, $\vec{r_1},\vec{r_2}$ was calculated as:
+\begin{equation}
+d(\vec{r_1},\vec{r_2})=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}
+\end{equation}
+
+The rest of the queries are in form of SELECT commands returning rows (event details) from the EVENTS table. The retrieved rows are then returned to the front-end in form of json objects. 
+
 This concludes the back-end module.
 
-\subsubsection{Business Logic}
+\subsection{Business Logic}
 We explain business logic here...
 
-\section{Use-Cases and Discussion}
-Use-cases and discussion go here...
+\section{Use-Cases}
+The primary use case of this service is to provide a context aware search of events happening on or around the UMD campus. The contextual information exploited in this system include time and user location. Specifically, the system automatically detects the current geographical location of the user and time and allows searching based on this information. Typical use cases of this system are:
+\begin{enumerate}
+\item{Consider a user who is present on campus, is free at the moment and is wondering if there is an event happening nearby which he/she can attend. Such a user can select the `now' and `near me' option and the system will display the appropriate events.}
+\item{Another use case is of a user who is busy presently but is interested in attending an event in next couple of hours. Such a user can select the `in \_ hours' option and look for events of interests.}
+\item{Suppose the above user knows that he/she would be constrained to a tentative location on campus after a few hours and wants to look for events that he/she can attend at that time and location. Such a search can be executed using the `in \_ hours' option and also selecting the tentative location.}
+\item{The system can also be useful for users who are planning their week schedule and are interested in events happening between specific dates. }
+\item{The system is also caters to users with more specific needs. For example, some more `sedentary' users might be interested in events happening in or around a specific building only. Such a search can be executed by specifying the name of the building of interest and the distance and selecting an appropriate time option. The system, in such a case displays only the events located near the specified building.}
+\item{Another set of users might only be interested in certain categories of events such as academic and/or sports only. Such users can specify their interests using the event `type' option.}
+\item{For users whose interests are not limited to specific events types but to certain other constraints that can be determined by the event description or titles, the system allows searching the title or description for user-specified word(s).}
+\end{enumerate}
 
+The above use cases are examples of situations when a user wants to look for events under certain constraints. However, regular visitors to the service would have nearly constant constraints. The system saves such users from specifying the same options multiple times by saving the user preferences. The next time a user visits the service website, the search criteria will be predetermined based on his/her saved preferences. The user will be free to modify and overwrite these preferences at his discretion.
+
+ 
 \section{Conclusion and Future Work}
 This paper introduced a novel system that presents UMD events on agnostic mobile platforms based on contextual information in addition to user preferences. Taking major contextual information into account such as location and time in an ever changing environments, our system retrieves relevant events and presents to the user in an efficient and effective way.
 
