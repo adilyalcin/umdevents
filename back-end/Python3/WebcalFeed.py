@@ -1,7 +1,7 @@
-import urllib, json
+import urllib2, json
 from threading import Timer
 import time
-from urllib.request import urlopen
+# from urllib.request import urlopen
 from datetime import datetime
 import pymysql
 
@@ -12,9 +12,9 @@ def tStampToDateTime(ts):
 def processWebcalFeed():  
         
     url = 'http://www.cs.umd.edu/webcal/webcal_dept.json'
-    request = urllib.request.Request(url)
-    response = urllib.request.urlopen(request)
-    data = (response.read().decode('utf-8'))
+    request = urllib2.Request(url)
+    response = urllib2.urlopen(request)
+    data = (response.read().decode('latin-1'))
     jsonDict = json.loads(data)
     
     conn = pymysql.connect(host='127.0.0.1', port=3306, user='umdevents', passwd='umdevents', db='UMDEVENTS')

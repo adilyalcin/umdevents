@@ -1,14 +1,14 @@
-import urllib, json
-from html.parser import HTMLParser
+import urllib2, json
+from HTMLParser import HTMLParser
 from threading import Timer
 import time
-from urllib.request import urlopen
+#from urllib.request import urlopen
 from datetime import datetime
 import pymysql
 
 class MLStripper(HTMLParser):
     def __init__(self):
-        super().__init__()
+        HTMLParser.__init__(self)
         self.reset()
         self.fed = []
     def handle_data(self, d):
@@ -27,9 +27,11 @@ def processTalksFeed():
     cur = conn.cursor()
             
     url = 'https://talks.cs.umd.edu/talks.json'
-    request = urllib.request.Request(url)
-    response = urllib.request.urlopen(request)
-    data = (response.read().decode('utf-8'))
+ #   request = urllib.request.Request(url)
+    request = urllib2.Request(url)
+    response = urllib2.urlopen(request)
+ #   response = urllib.request.urlopen(request)
+    data = (response.read().decode('latin-1'))
     jsonDict = json.loads(data)
         
     for item in jsonDict:

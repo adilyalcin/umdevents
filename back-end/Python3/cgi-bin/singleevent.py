@@ -25,11 +25,11 @@ conn = pymysql.connect(host='127.0.0.1', port=3306, user='umdevents', passwd='um
 cursor = conn.cursor ()
 
 # Construct the query 
-outputFields = ('id', 'title', 'description', 'startDateTime','endDateTime', 'audience', 'locationName', 'locationRoomNumber', 'categories', 'liked');
+outputFields = ('id','facilId', 'title', 'description', 'eventWebsite','startDateTime','endDateTime', 'audience', 'locationName', 'locationRoomNumber', 'categories', 'liked');
 queryVariables = outputFields + ('id', param['id'].value);
 
 # Query the database
-sql = 'SELECT %s,%s,%s,%s,%s,%s,%s,%s,%s,%s FROM EVENTS WHERE %s = %s'
+sql = 'SELECT %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s FROM EVENTS WHERE %s = %s'
 
 
 #cursor.execute(sql1 % (outputFields))
@@ -41,6 +41,8 @@ columns = [desc[0] for desc in cursor.description]
 result = []
 for row in rows:
     d = dict(zip(columns, row))
+    if(d['categories'] is not None):
+        d['categories'] = d['categories'].strip(',').split(',');
     # Following four lines are there because UI needs date and time separately
     d['startDate'] = time.strftime("%m/%d/%Y", time.gmtime(time.mktime(d['startDateTime'].timetuple())))
     d['startTime'] = time.strftime("%H:%M:%S", time.gmtime(time.mktime(d['startDateTime'].timetuple())))

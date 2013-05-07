@@ -1,0 +1,35 @@
+If you want to give away our stream link.  PLEASE ALWAYS USE THIS
+http://www.bassradio.fm/Listen_Links/listen.pls
+
+
+IP - 199.241.188.187
+Password - bass:sonic
+DJ Port - 5932
+
+ 
+ADD SERVER
+Name - BASS RADIO
+Address - 199.241.188.187
+port - 5932
+password - bass:sonic
+ 
+ADD SERVER INFO
+Name - BASS RADIO
+Description - BASS RADIO
+Genre - Techno
+Url - http://www.bassradio.fm
+ICQ -
+IRC -
+AIM -
+Make server public - X check this box3
+ 
+STEAM INFO
+Bitrate - 128k
+Sample rate - 44100
+Channel - Stereo
+Codec - MP3
+Update song from file - Check the Activate box and find your title location
+ 
+RECORD SECTION
+MP3 - 320
+choose a location to have it automatically save to.
