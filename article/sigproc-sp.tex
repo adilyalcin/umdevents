@@ -238,7 +238,7 @@ Events with duplicate identifiers are not allowed in the database. The current s
 \subsubsection{Querying the Database}
 This section describes the module for handling the queries from the database. 
 
-This component is also implemented in Python and uses CGI to interact with the web server and PyMySQL to connect to the MySQL database. As described in Section \ref{frontEnd}, the user selects time, location and category choices using pre-specified options. These options are passed to this module in form of CGI parameters to a python script which parsers them and constructs appropriate MYSQL queries. 
+This component is also implemented in Python and uses CGI to interact with the web server and PyMySQL to connect to the MySQL database. As described in Section \ref{frontEnd}, the user selects time, location and category choices using pre-specified options. These options are passed to this module in form of CGI parameters to a python script which parses them and constructs appropriate MYSQL queries. 
 
 One of the front end features allows searching for events happening within a specific radius of a building or user's current position. While building's or user's locations are specified in terms of latitudes and longitudes, a natural way to compute radius would be using Euclidean distances between geographical locations. For this purpose, the latitude-longitude information is converted to Cartesian coordinates before computing distances. Given  a points latitude, $\theta$ and longitude, $\phi$, the Cartesian coordinates ($x,y$) are computed as:\\
 \begin{equation}
