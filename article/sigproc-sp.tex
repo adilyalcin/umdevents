@@ -28,6 +28,7 @@
 
 \documentclass{acm_proc_article-sp}
 \usepackage{url}
+\usepackage{subfig}
 
 %
 \def\sharedaffiliation{%
@@ -110,7 +111,7 @@
 \begin{abstract}
 Context-aware event finding system is expected to make use of not only user preferences but also information surrounding the specific contextual situation that is relevant. For instance, a user in search of an event within a certain distance should be presented with a set by taking her current location into account. In fact, not only her current location, but also the distance specified, her preferences, and any other factors that help define the relevant context. This contextual information gathering ought to occur pervasively in an ever changing environment where the process is encapsulated from the user.
 
-In this paper, we describe a novel mobile application that presents events on University of Maryland (UMD) College Park Campus to the user based on contextual information in addition to choices the user made in the past. The obvious challenge with this approach is determining and making use of the relevant contextual information per use-case. Experimental results appear to support that our application is able to efficiently and effectively present relevant events to the user on agnostic mobile platforms.
+In this paper, we describe a new mobile application that presents events on University of Maryland (UMD) College Park Campus to the user based on contextual information in addition to choices the user made in the past. The obvious challenge with this approach is determining and making use of the relevant contextual information per use-case.
 \end{abstract}
 
 % A category with the (minimum) three required fields
@@ -125,10 +126,9 @@ Most web applications today expose themselves with static interfaces in a segreg
 
 With these facts in mind, we have built a system that utilizes contextual information to serve for the purposes of event finding application on agnostic mobile platforms. Some of the key features are:
 \begin{itemize}
-\item Provided with Wi-Fi connectivity, any mobile device with a browser to invoke our service.
-\item No matter what type of mobile device is used, all capabilities offered by the service as well as the look and feel to be identical. 
+\item Provided with internet connectivity (WiFi, 3G, 4G, cable, etc), any device (mobile or not) with a browser to invoke our service.
+\item No matter what type of mobile device is used, all capabilities offered by the service. 
 \item In addition to regular event search options, distance proximity and temporal queries are supported. 
-\item Queries in previous sessions, presumably reflecting user's profile are stored for smarter recommendations. 
 \end{itemize}
 
 Furthermore, our application implements Model View Controller (MVC) architecture pattern, where the representation of information is segregated from the user's interaction with it. With this architecture approach, the model that consists of event data and the controlling business logic and the graphical user interface are all separated from each other so that loose coupling, better reusability and more scalable solution is attained.
@@ -172,9 +172,104 @@ Illustrated in Figure 1, UMD Event Finder Service utilizes a persistent storage,
 \caption{UMD Event Finder - Physical Architecture.}
 \end{figure*}
 
+%% ADIL
 \subsection{Front-end Module}	 
 \label{frontEnd}
-We explain front-end here...
+
+For our system, we decided to build a web based frontend (using HTML5, CSS3 and Javascript).
+The web technology has come to a point where rich interactive applications can be developed cross-platform easily.
+We chose JQuery and JQuery Mobile as the cross-platform interface and support libraries.
+The other option that was considered was building platform specific apps (android/ iphone/ windows phone).
+However, their development environments and languages are harder to use and so is deploying such apps to mobile devices, 
+  because of (developer and user) permissions required for installation.
+Our current prototype shows that this has been a reasonable approach given the easy access to our service and interactive interface.
+We should note that the only disadvantage (from user interaction perspective) is the lack of platform-integrated push notification.
+Such notifications could be used to alert users of events happening in real time near them.
+Such an app would ruin in the background, either to notify of the events that the user liked before, or suggest new events happening soon near the user's current location.
+However, there are also additional issues with such notifications, including the strict guidelines on how often the notifications can be sent, and that inappropriate use would be more annoying than helpful.
+
+Now, let's focus on our user interface approach.
+First, we identified three main components, as shown in Figure \ref{fig:screen_basic}: search, results and details.
+Search and results are presented in the same page (HTML), while details have their own page.
+The specific events can be hot-linked using the specific event page and the unique event id.
+
+\begin{figure*}
+\centering 
+\subfloat[\label{fig:screen_0_main}Main search screen]{\begin{centering}
+\epsfig{file=screen_0_main.eps,height=2.8in}
+\par\end{centering}
+
+}\subfloat[\label{fig:screen_5_results}Search results listing]{\begin{centering}
+\epsfig{file=screen_5_results.eps,height=2.8in}
+\par\end{centering}
+
+}\subfloat[\label{fig:screen_6_singleevent}Details about a single event]{\begin{centering}
+\epsfig{file=screen_6_singleevent.eps,height=2.8in}
+\par\end{centering}
+
+}
+\caption{\label{fig:screen_basic}User interface is divided into 3 main sections shown above: Search, Results and Details}
+\end{figure*}
+
+
+Basic search options, where, when and what(categories) have multiple pre-defined options.
+These options may require more details to be presented, such as "`how many hours from now"' and "`which building and how far"'.
+This presents a 2-level search option, and is shown to be practical and easy to use in our prototype.
+Yet, this approach forces the options for search settings to a two-level simple hierarchy, and any new option added
+  needs to follows this basic guideline.
+We use internal pages in JQuery mobile to show these options, which are communicated back to the main search page easily.
+Some of the search options are presented in Figure \ref{fig:screen_search_details}.
+We should note that these options are set according to our predicted use cases of an event browsing system for a campus community.
+Further surveys and user studies need to performed to understand how people would generally use an event query system.
+
+Another feature, which we assume is important for users, is the ability to store personal preferences.
+Our current solution is local, we store search options in cookie when the user wants to use the settings for later.
+This is the initial take on implementing profile storage.
+All the search options are saved, and re-loaded when the page is loaded again.
+Thus, preferences act as personalized "`default"' settings.
+The primary use would be filtering based on categories, time as now or future, and location as a specific building or 
+  anywhere in campus.
+The limitation of our current approach is that it only works on a single device.
+Another limitation is that only a single profile is supported.
+We predict that an extensive use will result in multiple user profiles.
+
+We propose that a final system should include a user authentication and more detailed user profile management, while still
+  maintaining the simplicity of our current prototype.
+Regarding including user profiles, we acknowledge that log-in screens and text entry on mobile devices can be 
+  deterring users from using the system if the system is only available when logged in.
+The data is already retrieved from public resources, so should be available to public.
+The user-account protected data should be restricted to only user-specific features, such as multiple preferences,
+  and access to user liked events.
+Number of "`likes"' of an event may still be available to the public, as it exposes no personal information.
+The question to be answered is if it provides additional value to public.
+
+\begin{figure*}
+\centering 
+\subfloat[\label{fig:screen_1_where}Location related options]{\begin{centering}
+\epsfig{file=screen_1_where.eps,height=2.8in}
+\par\end{centering}
+
+}\subfloat[\label{fig:screen_2_building}Search \& select building ]{\begin{centering}
+\epsfig{file=screen_2_building.eps,height=2.8in}
+\par\end{centering}
+
+}\subfloat[\label{fig:screen_4_category}Hierarchical categories]{\begin{centering}
+\epsfig{file=screen_4_category.eps,height=2.8in}
+\par\end{centering}
+
+}
+\caption{\label{fig:screen_search_details}Some of the additional search options}
+\end{figure*}
+
+Another minor extension would be configurable sorting of the events.
+Currently, sorting is based on the event start time, and latest event is shown first.
+This works well if "`now"' is selected as the time option.
+However, if "`future"' option is selected, the search is likely to present events happening months later.
+And, some events may have started a few weeks ago (generally promotions, but some might be valid events that the user may keep up with).
+Therefore, time based sorting can be extended to list events that is "`closer"' to current time.
+One other event list sorting option we considered was distance, but we should point that this option should only be available when a location-specific search was made (near building/near me).
+
+
 
 \subsection{Back-end Module}
 In this sub section, we elaborate the design and implementation of back-end module for the UMD Event Finder application. 
@@ -260,9 +355,6 @@ d(\vec{r_1},\vec{r_2})=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}
 The rest of the queries are in form of SELECT commands returning rows (event details) from the EVENTS table. The retrieved rows are then returned to the front-end in form of json objects. 
 
 This concludes the back-end module.
-
-\subsection{Business Logic}
-We explain business logic here...
 
 \section{Use-Cases}
 The primary use case of this service is to provide a context aware search of events happening on or around the UMD campus. The contextual information exploited in this system include time and user location. Specifically, the system automatically detects the current geographical location of the user and time and allows searching based on this information. Typical use cases of this system are:

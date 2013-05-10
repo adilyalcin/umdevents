@@ -1,0 +1,104 @@
+\begin{thebibliography}{10}
+
+\bibitem{cs:talks}
+Cstalks.
+\newblock \url{https://talks.cs.umd.edu/talks.json}, 2013.
+
+\bibitem{cs:webcal}
+Cswebcal.
+\newblock \url{http://www.cs.umd.edu/webcal/webcal_dept.json}, 2013.
+
+\bibitem{itu:cellphone}
+Itu.
+\newblock \url{http://www.itu.int/en/ITU-D/Statistics/Pages/stat/default.aspx},
+  2013.
+
+\bibitem{agrawal:preferences}
+R.~Agrawal and E.~L. Wimmers.
+\newblock A framework for expressing and combining preferences.
+\newblock {\em SIGMOD Rec.}, 29(2):297--306, May 2000.
+
+\bibitem{alberto:usercentric}
+P.~Alberto.
+\newblock User-centric mobile services: context provisioning and user
+  profiling.
+\newblock In {\em Proceedings of the 11th Annual International Digital
+  Government Research Conference on Public Administration Online: Challenges
+  and Opportunities}, dg.o '10, pages 122--130. Digital Government Society of
+  North America, 2010.
+
+\bibitem{gellersen:multisensor}
+H.~W. Gellersen, A.~Schmidt, and M.~Beigl.
+\newblock Multi-sensor context-awareness in mobile devices and smart artifacts.
+\newblock {\em Mob. Netw. Appl.}, 7(5):341--351, Oct. 2002.
+
+\bibitem{harter:anatomy}
+A.~Harter, A.~Hopper, P.~Steggles, A.~Ward, and P.~Webster.
+\newblock The anatomy of a context-aware application.
+\newblock {\em WIRELESS NETWORKS, VOL}, 8:187--197, 1999.
+
+\bibitem{indulska:ccpp}
+J.~Indulska, R.~Robinson, A.~Rakotonirainy, and K.~Henricksen.
+\newblock Experiences in using cc/pp in context-aware systems.
+\newblock In {\em Proceedings of the 4th International Conference on Mobile
+  Data Management}, MDM '03, pages 247--261, London, UK, UK, 2003.
+  Springer-Verlag.
+
+\bibitem{kießling:optimizing}
+W.~Kießling and B.~Hafenrichter.
+\newblock Optimizing preference queries for personalized web services.
+\newblock In {\em INSTITUTE OF COMPUTER SCIENCE, UNIVERSITY OF AUGSBURG}, pages
+  461--466, 2002.
+
+\bibitem{maamar:contextualisation}
+Z.~Maamar, S.~Kouadri~Mostefaoui, and H.~Yahyaoui.
+\newblock Toward an agent-based and context-oriented approach for web services
+  composition.
+\newblock {\em IEEE Trans. on Knowl. and Data Eng.}, 17(5):686--697, May 2005.
+
+\bibitem{peddemors:lbs}
+A.~J.~H. Peddemors, M.~M. Lankhorst, and J.~d. Heer.
+\newblock Presence, location, and instant messaging in a context-aware
+  application framework.
+\newblock In {\em Proceedings of the 4th International Conference on Mobile
+  Data Management}, MDM '03, pages 325--330, London, UK, UK, 2003.
+  Springer-Verlag.
+
+\bibitem{rao:lbs}
+B.~Rao and L.~Minakakis.
+\newblock Evolution of mobile location-based services.
+\newblock {\em Commun. ACM}, 46(12):61--65, Dec. 2003.
+
+\bibitem{raptis:museum}
+D.~Raptis, N.~Tselios, and N.~Avouris.
+\newblock Context-based design of mobile applications for museums: a survey of
+  existing practices.
+\newblock In {\em Proceedings of the 7th international conference on Human
+  computer interaction with mobile devices \& services}, MobileHCI '05, pages
+  153--160, New York, NY, USA, 2005. ACM.
+
+\bibitem{ryan:mobile}
+C.~Ryan and A.~Gonsalves.
+\newblock The effect of context and application type on mobile usability: an
+  empirical study.
+\newblock In {\em Proceedings of the Twenty-eighth Australasian conference on
+  Computer Science - Volume 38}, ACSC '05, pages 115--124, Darlinghurst,
+  Australia, Australia, 2005. Australian Computer Society, Inc.
+
+\bibitem{sousa:mobility}
+J.~a.~P. Sousa and D.~Garlan.
+\newblock Aura: an architectural framework for user mobility in ubiquitous
+  computing environments.
+\newblock In {\em Proceedings of the IFIP 17th World Computer Congress - TC2
+  Stream / 3rd IEEE/IFIP Conference on Software Architecture: System Design,
+  Development and Maintenance}, WICSA 3, pages 29--43, Deventer, The
+  Netherlands, The Netherlands, 2002. Kluwer, B.V.
+
+\bibitem{valenzuela:insider}
+B.~Valenzuela.
+\newblock The insider: the web site that brought mesa's williams campus
+  together.
+\newblock In {\em Proceedings of the 31st annual ACM SIGUCCS fall conference},
+  SIGUCCS '03, pages 103--107, New York, NY, USA, 2003. ACM.
+
+\end{thebibliography}
